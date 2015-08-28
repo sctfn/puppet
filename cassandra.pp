@@ -25,7 +25,7 @@ file { 'cassandra_yaml':
   ensure => 'file',
   owner => 'cassandra',
   group => 'cassandra',
-  source => '/vagrant/cassandra.yaml'
+  source => '/vagrant/puppet/cassandra.yaml'
 }
 
 service { 'cassandra':
