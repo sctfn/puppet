@@ -4,8 +4,7 @@ yumrepo { 'datastax':
   baseurl => 'http://rpm.datastax.com/community',
   descr => 'DataStax Repo for Apache Cassandra',
   enabled => 1,
-  gpgcheck => 0,
-  before => Package['dsc20']
+  gpgcheck => 0
 }
 
 
@@ -16,9 +15,24 @@ package { "java-1.7.0-openjdk":
 
 package { "dsc20":
   ensure => "installed",
-  allow_virtual => false
+  allow_virtual => false,
+  require => Yumrepo['datastax']
 }
 
+file { 'cassandra_yaml':
+  path => '/etc/cassandra/conf/cassandra.yaml',
+  require => Package['dsc20'],
+  ensure => 'file',
+  owner => 'cassandra',
+  group => 'cassandra',
+  source => '/vagrant/cassandra.yaml'
+}
+
+service { 'cassandra':
+  name => 'cassandra',
+  ensure => 'running',
+  require => [ File['cassandra_yaml'], Package['java-1.7.0-openjdk'] ]
+}
 
 # yaml_setting { "cassandra_yaml_1":
 #   target => '/etc/cassandra/conf/cassandra.yaml',
