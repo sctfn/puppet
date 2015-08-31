@@ -35,11 +35,11 @@
 # Scott Fenton <sctfen@gmail.com>
 #
 class cassandra (
-  $cluster_name = "cluster",
-  $seeds = "",
-  $listen_address = "",
-  $rpc_address = "",
-  $config_file = "/etc/cassandra/conf/cassandra.yaml",
+  $cluster_name = $cassandra::params::cluster_name,
+  $seeds = $cassandra::params::seeds,
+  $listen_address = $cassandra::params::listen_address,
+  $rpc_address = $cassandra::params::rpc_address,
+  $config_file = $cassandra::params::config_file,
   $package_name = $cassandra::params::package_name,
   $java_version = $cassandra::params::java_version,
   $config_template = $cassandra::params::config_template

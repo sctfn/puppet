@@ -1,4 +1,4 @@
-class cassandra::service {
+class cassandra::service inherits cassandra {
 
   service { 'cassandra':
     name => 'cassandra',

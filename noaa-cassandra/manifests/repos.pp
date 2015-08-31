@@ -1,4 +1,4 @@
-class cassandra::repos {
+class cassandra::repos inherits cassandra {
   yumrepo { 'datastax':
     name => 'datastax',
     ensure => 'present',
