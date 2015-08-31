@@ -1,4 +1,4 @@
-class { 'cassandra::repos':
+class cassandra::repos {
   yumrepo { 'datastax':
     name => 'datastax',
     ensure => 'present',

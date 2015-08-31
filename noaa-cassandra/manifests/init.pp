@@ -45,9 +45,13 @@ class cassandra (
   $config_file = "/etc/cassandra/conf/cassandra.yaml"
 ) {
 
+  class { 'cassandra::repos' :
+  }
+  
   class { 'cassandra::packages':
     package_name => $package_name,
     java_version => $java_version,
+    require => Class['cassandra::repos']
   }
 
   class { 'cassandra::config':

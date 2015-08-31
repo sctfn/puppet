@@ -1,4 +1,4 @@
-class { 'cassandra::service':
+class cassandra::service {
 
   service { 'cassandra':
     name => 'cassandra',

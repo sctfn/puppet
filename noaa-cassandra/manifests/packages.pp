@@ -5,6 +5,5 @@ class cassandra::packages (
     package { [$java_version, $package_name] :
       ensure => installed,
       allow_virtual => false,
-      require => Class['cassandra::repos']
     }
 }
