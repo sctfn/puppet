@@ -45,19 +45,11 @@ class cassandra (
   $config_template = $cassandra::params::config_template
 ) inherits cassandra::params {
 
-  class { 'cassandra::repos' :
-  }
-  
-  class { 'cassandra::packages':
-    require => Class['cassandra::repos']
-  } 
-
-  class { 'cassandra::config':
-    require => Class['cassandra::packages']
-  } 
-    
-  class { 'cassandra::service':
-    require => Class['cassandra::config']
-  }
+  anchor { 'cassandra::begin' : } ->
+  class { 'cassandra::repos' :  } ->
+  class { 'cassandra::packages' : } -> 
+  class { 'cassandra::config' : } ->
+  class { 'cassandra::service' : } ->
+  anchor { 'cassandra::end' :}
 
 }
