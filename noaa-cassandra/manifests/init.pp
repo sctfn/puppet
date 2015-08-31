@@ -42,36 +42,26 @@ class cassandra (
   $package_name = "dsc20",
   $java_version = "java-1.7.0-openjdk",
   $config_template = "/vagrant/puppet/noaa-cassandra/templates/cassandra.yaml.erb",
-  $config_file = "/etc/cassandra/conf/cassandra.yaml" ) {
+  $config_file = "/etc/cassandra/conf/cassandra.yaml"
+) {
 
-  yumrepo { 'datastax':
-    name => 'datastax',
-    ensure => 'present',
-    baseurl => 'http://rpm.datastax.com/community',
-    descr => 'DataStax Repo for Apache Cassandra',
-    enabled => 1,
-    gpgcheck => 0
+  class { 'cassandra::packages':
+    package_name => $package_name,
+    java_version => $java_version,
   }
 
-  
-  package { [$java_version, $package_name] :
-    ensure => installed,
-    allow_virtual => false,
-    require => Yumrepo['datastax']
+  class { 'cassandra::config':
+    cluster_name => $cluster_name,
+    seeds => $seeds,
+    listen_address => $listen_address,
+    rpc_address => $rpc_address,
+    config_template => $config_template,
+    config_file => $config_file,
+    require => Class['cassandra::packages']
+  }
+    
+  class { 'cassandra::service':
+    require => Class['cassandra::config']
   }
 
-  file { $config_file :
-    ensure => present,
-    owner => 'cassandra',
-    group => 'cassandra',
-    content => template($config_template),
-    require => Package[$package_name]
-  }
-
-  service { 'cassandra':
-   name => 'cassandra',
-   ensure => 'running',
-   require => [ File[$config_file], Package[$java_version] ]
- }
-
-  }
+}
