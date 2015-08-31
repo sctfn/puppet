@@ -67,4 +67,11 @@ class cassandra (
     content => template($config_template),
     require => Package[$package_name]
   }
-}
+
+  service { 'cassandra':
+   name => 'cassandra',
+   ensure => 'running',
+   require => [ File[$config_file], Package[$java_version] ]
+ }
+
+  }
