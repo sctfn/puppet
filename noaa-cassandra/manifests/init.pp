@@ -40,12 +40,24 @@ class cassandra {
   $listen_address = "",
   $rpc_address = $listen_address,
   $package_name = "dsc20",
+  $java_version => "java-1.7.0-openjdk",
   $config_template = "/vagrant/puppet/noaa-cassandra/templates/cassandra.yaml.erb",
   $config_file = "/etc/cassandra/conf/cassandra.yaml",
+
+  yumrepo { 'datastax':
+    name => 'datastax',
+    ensure => 'present',
+    baseurl => 'http://rpm.datastax.com/community',
+    descr => 'DataStax Repo for Apache Cassandra',
+    enabled => 1,
+    gpgcheck => 0
+  }
+
   
-  package { $package_name :
+  package { [$java_version, $package_name] :
     ensure => installed,
     allow_virtual => false,
+    require => Yumrepo['datastax']
   }
 
   file { $config_file :
