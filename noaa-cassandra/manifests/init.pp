@@ -1,6 +1,7 @@
 # == Class: cassandra
 #
-# Full description of class cassandra here.
+# Initialize a basic Cassandra setup. This module currently supports a
+# single-datacenter cluster.
 #
 # === Parameters
 #
@@ -24,18 +25,34 @@
 # === Examples
 #
 #  class { 'cassandra':
-#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
+#    cluster_name => "Bob",
+#    seeds => "1.2.3.4,1.2.3.5",
+#    listen_address => "192.168.1.1",
 #  }
 #
 # === Authors
 #
-# Author Name <author@domain.com>
-#
-# === Copyright
-#
-# Copyright 2015 Your name here, unless otherwise noted.
+# Scott Fenton <sctfen@gmail.com>
 #
 class cassandra {
+  $cluster_name = "cluster",
+  $seeds = "",
+  $listen_address = "",
+  $rpc_address = $listen_address,
+  $package_name = "dsc20",
+  $config_template = "/vagrant/puppet/noaa-cassandra/templates/cassandra.yaml.erb",
+  $config_file = "/etc/cassandra/conf/cassandra.yaml",
+  
+  package { $package_name :
+    ensure => installed,
+    allow_virtual => false,
+  }
 
-
+  file { $config_file :
+    ensure => present,
+    owner => 'cassandra',
+    group => 'cassandra',
+    content => template($config_template),
+    require => Package[$package_name]
+  }
 }
