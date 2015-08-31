@@ -39,10 +39,10 @@ class cassandra (
   $seeds = "",
   $listen_address = "",
   $rpc_address = "",
-  $config_file = "/etc/cassandra/conf/cassandra.yaml"
+  $config_file = "/etc/cassandra/conf/cassandra.yaml",
   $package_name = $cassandra::params::package_name,
   $java_version = $cassandra::params::java_version,
-  $config_template = $cassandra::params::config_template,
+  $config_template = $cassandra::params::config_template
 ) inherits cassandra::params {
 
   class { 'cassandra::repos' :
