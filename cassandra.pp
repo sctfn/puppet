@@ -1,35 +1,45 @@
-yumrepo { 'datastax':
-  name => 'datastax',
-  ensure => 'present',
-  baseurl => 'http://rpm.datastax.com/community',
-  descr => 'DataStax Repo for Apache Cassandra',
-  enabled => 1,
-  gpgcheck => 0
+
+
+class { 'cassandra':
+  cluster_name => 'Desilu',
+  seeds => "172.28.128.3",
+  listen_address => "",
+  rpc_address => ""
 }
 
 
-package { "java-1.7.0-openjdk":
-  ensure => "installed",
-  allow_virtual => false
-}
+# yumrepo { 'datastax':
+#   name => 'datastax',
+#   ensure => 'present',
+#   baseurl => 'http://rpm.datastax.com/community',
+#   descr => 'DataStax Repo for Apache Cassandra',
+#   enabled => 1,
+#   gpgcheck => 0
+# }
 
-package { "dsc20":
-  ensure => "installed",
-  allow_virtual => false,
-  require => Yumrepo['datastax']
-}
 
-file { 'cassandra_yaml':
-  path => '/etc/cassandra/conf/cassandra.yaml',
-  require => Package['dsc20'],
-  ensure => 'file',
-  owner => 'cassandra',
-  group => 'cassandra',
-  source => '/vagrant/puppet/cassandra.yaml'
-}
+# package { "java-1.7.0-openjdk":
+#   ensure => "installed",
+#   allow_virtual => false
+# }
 
-service { 'cassandra':
-  name => 'cassandra',
-  ensure => 'running',
-  require => [ File['cassandra_yaml'], Package['java-1.7.0-openjdk'] ]
-}
+# package { "dsc20":
+#   ensure => "installed",
+#   allow_virtual => false,
+#   require => Yumrepo['datastax']
+# }
+
+# file { 'cassandra_yaml':
+#   path => '/etc/cassandra/conf/cassandra.yaml',
+#   require => Package['dsc20'],
+#   ensure => 'file',
+#   owner => 'cassandra',
+#   group => 'cassandra',
+#   source => '/vagrant/puppet/cassandra.yaml'
+# }
+
+# service { 'cassandra':
+#   name => 'cassandra',
+#   ensure => 'running',
+#   require => [ File['cassandra_yaml'], Package['java-1.7.0-openjdk'] ]
+# }
