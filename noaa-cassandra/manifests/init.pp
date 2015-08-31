@@ -39,20 +39,16 @@ class cassandra (
   $seeds = "",
   $listen_address = "",
   $rpc_address = "",
-  $package_name = "dsc20",
-  $java_version = "java-1.7.0-openjdk",
-  $config_template = "/vagrant/puppet/noaa-cassandra/templates/cassandra.yaml.erb",
   $config_file = "/etc/cassandra/conf/cassandra.yaml"
-) {
+) inherits cassandra::params {
 
-  class { 'cassandra::repos' :
-  }
+  class { 'cassandra::repos' } ->
   
   class { 'cassandra::packages':
     package_name => $package_name,
     java_version => $java_version,
-    require => Class['cassandra::repos']
-  }
+#    require => Class['cassandra::repos']
+  } ->
 
   class { 'cassandra::config':
     cluster_name => $cluster_name,
@@ -61,11 +57,11 @@ class cassandra (
     rpc_address => $rpc_address,
     config_template => $config_template,
     config_file => $config_file,
-    require => Class['cassandra::packages']
-  }
+#    require => Class['cassandra::packages']
+  } ->
     
   class { 'cassandra::service':
-    require => Class['cassandra::config']
+#    require => Class['cassandra::config']
   }
 
 }
