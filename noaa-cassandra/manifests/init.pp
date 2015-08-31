@@ -46,18 +46,10 @@ class cassandra (
   }
   
   class { 'cassandra::packages':
-    package_name => $package_name,
-    java_version => $java_version,
     require => Class['cassandra::repos']
   } 
 
   class { 'cassandra::config':
-    cluster_name => $cluster_name,
-    seeds => $seeds,
-    listen_address => $listen_address,
-    rpc_address => $rpc_address,
-    config_template => $config_template,
-    config_file => $config_file,
     require => Class['cassandra::packages']
   } 
     
